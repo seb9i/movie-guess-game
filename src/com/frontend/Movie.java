@@ -1,20 +1,28 @@
+package com.frontend;
+
+import com.calls.ApiCall;
+import com.calls.FileHandle;
+
 import java.net.http.HttpResponse;
 import java.util.*;
 
 
 public class Movie {
     private HttpResponse<String> movieData;
-    private static ArrayList<String> lines = FileHandle.getFileData("src/movielist.txt");
+    private static final ArrayList<String> lines = FileHandle.getFileData("src/movies/movielist.txt"); // List of movie ids
 
 
     /**
      * This method is the foundational block of this program, it returns the metadata of any IMDB movie given its id.
-     * @param id The IMDB id of the movie that you want to scrape.
+     * @param id The IMDB id of the movie that you want to return.
      * @return HashMap that includes data about the movie including overview, imdb id, release year, title, and average IMDB rating.
      */
-    public static HashMap<Object, Object> returnMovieData(String id){
-        String response = ApiCall.get("https://api.themoviedb.org/3/find/" + id + "?external_source=imdb_id").body();
-        HashMap<Object, Object> movieData = new HashMap<>();
+    public static HashMap<String, String> returnMovieData(String id){
+
+        String response = ApiCall.get("https://api.themoviedb.org/3/find/" + id + "?external_source=imdb_id").body(); // Main Response
+        HashMap<String, String> movieData = new HashMap<>();
+
+        // Parsing the body of the response by using String functions
         movieData.put("overview", response.substring(response.indexOf("\"overview\"") + 12, response.indexOf("poster_path") - 3));
         movieData.put("imdb_id", id);
         movieData.put("release_year", response.substring(response.indexOf("\"release_date\"") + 16, response.indexOf("\"release_date\"") + 20));
@@ -34,21 +42,19 @@ public class Movie {
      * @return Array list of randomized movies including the one in the include parameter.
      */
 
-    public static ArrayList<HashMap<Object, Object>> returnMovieData(int numberOfMovies, String include){
-        ArrayList<HashMap<Object, Object>> hi = new ArrayList<>();
-        Collections.shuffle(lines);
+    public static ArrayList<HashMap<String, String>> returnMovieData(int numberOfMovies, String include){
+        ArrayList<HashMap<String, String>> hi = new ArrayList<>();
+        Collections.shuffle(lines); // Randomizing movie list
 
         int i = 0;
         while (i < numberOfMovies - 1){
-            if (lines.get(i).equals(include)){
-            }
-            else {
+            if (!(lines.get(i).equals(include))){
                 hi.add(returnMovieData(lines.get(i)));
                 i += 1;
             }
         }
         hi.add(returnMovieData(include));
-        Collections.shuffle(hi);
+        Collections.shuffle(hi); // Randomizing List Again
         return hi;
     }
 
@@ -56,7 +62,7 @@ public class Movie {
      * Returns a random movie, no parameters needed.
      * @return Random Movie HashMap.
      */
-    public static HashMap<Object, Object> returnMovieData(){
+    public static HashMap<String, String> returnMovieData(){
 
         int randomId = (int)(Math.random() * lines.size());
         String randomIMDB = lines.get(randomId);
