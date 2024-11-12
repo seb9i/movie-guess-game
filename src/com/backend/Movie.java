@@ -1,4 +1,4 @@
-package com.frontend;
+package com.backend;
 
 import com.calls.ApiCall;
 import com.calls.FileHandle;
@@ -28,8 +28,9 @@ public class Movie {
         movieData.put("release_year", response.substring(response.indexOf("\"release_date\"") + 16, response.indexOf("\"release_date\"") + 20));
         movieData.put("title", response.substring(response.indexOf("\"title\"") + 9, response.indexOf("\"original_title\"")-2));
         movieData.put("vote_average", response.substring(response.indexOf("\"vote_average\"") + 15, response.indexOf("\"vote_count\"") - 1));
-        movieData.put("movie_image_url", "https://image.tmdb.org/t/p/w1280" + response.substring(response.indexOf("\"backdrop_path\"") + 17, response.indexOf("\"id\"")-2));
+        movieData.put("movie_image_url", "https://image.tmdb.org/t/p/w780" + response.substring(response.indexOf("\"backdrop_path\"") + 17, response.indexOf("\"id\"")-2));
         movieData.put("id", response.substring(response.indexOf("\"id\"") + 5, response.indexOf("\"title\"") - 1));
+        movieData.put("movie_poster_url", "https://image.tmdb.org/t/p/w780" + response.substring(response.indexOf("\"poster_path\"") + 15, response.indexOf("\"media_type\"") - 2));
 
 
         return movieData;
