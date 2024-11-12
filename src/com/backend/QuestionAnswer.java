@@ -1,4 +1,4 @@
-package com.frontend;
+package com.backend;
 /*
 Class for the main question system in the terminal.
 Will most likely be scrapped once I learn how to implement a GUI.
@@ -6,7 +6,7 @@ Will most likely be scrapped once I learn how to implement a GUI.
 public class QuestionAnswer {
     private final String question;
     private final String answer;
-    private double marginOfError = 0.10;
+    private double marginOfError = 0.05;
 
     public QuestionAnswer(String question, String answer){
         this.question = question;
