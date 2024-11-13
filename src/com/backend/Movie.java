@@ -30,7 +30,7 @@ public class Movie {
         movieData.put("vote_average", response.substring(response.indexOf("\"vote_average\"") + 15, response.indexOf("\"vote_count\"") - 1));
         movieData.put("movie_image_url", "https://image.tmdb.org/t/p/w780" + response.substring(response.indexOf("\"backdrop_path\"") + 17, response.indexOf("\"id\"")-2));
         movieData.put("id", response.substring(response.indexOf("\"id\"") + 5, response.indexOf("\"title\"") - 1));
-        movieData.put("movie_poster_url", "https://image.tmdb.org/t/p/w780" + response.substring(response.indexOf("\"poster_path\"") + 15, response.indexOf("\"media_type\"") - 2));
+        movieData.put("movie_poster_url", "https://image.tmdb.org/t/p/w342" + response.substring(response.indexOf("\"poster_path\"") + 15, response.indexOf("\"media_type\"") - 2));
 
 
         return movieData;

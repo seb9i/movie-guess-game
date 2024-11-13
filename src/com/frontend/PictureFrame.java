@@ -1,34 +1,46 @@
 package com.frontend;
 
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
 
 public class PictureFrame extends JFrame implements Runnable {
-
+    JButton button;
     private PicturePanel p;
-    private Thread windowThread;
+
 
     public PictureFrame(String display, String url) {
         super(display);
         int frameWidth = 1280;
         int frameHeight = 720;
-        p = new PicturePanel(url);
-        this.add(p);
+
+        setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(frameWidth, frameHeight);
-        this.setLocation(0, 0);
+        this.setLocation(500, 0);
+        p  = new PicturePanel(url);
+        p.setBounds(250, 100, 800, 800);
+        this.add(p);
+
+
+
+
+//        button = new JButton("Click Me");
+//        button.addActionListener(e -> {
+//            String newUrl = "https://image.tmdb.org/t/p/w780/bV0rWoiRo7pHUTQkh6Oio6irlXO.jpg";
+//           p.setImageUrl(newUrl);
+//       });
+//        button.setPreferredSize(new Dimension(50, 50));
+//        button.setLocation(0, 800);
+//        this.add(button);
+
         this.setVisible(true);
-        startThread();
-
+    }
+    public void setImageUrl(String urls){
+        p.setImageUrl(urls);
     }
 
-    public void startThread() {
-        windowThread = new Thread(this);
-        windowThread.start();
-    }
-
+    @Override
     public void run() {
-        while (true) {
-            p.repaint();
-        }
+
     }
 }

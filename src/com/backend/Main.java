@@ -54,9 +54,7 @@ public class Main {
                 if (result){
                     if (!iterator.hasNext()){
                         System.out.printf("You got it right, you finished with %d tries!\n", tries); // Final question
-                        m = new PictureFrame("Hello", randomMovie.get("movie_poster_url"));
-                        System.out.println(randomMovie.get("movie_poster_url"));
-
+                        m.setImageUrl(randomMovie.get("movie_poster_url"));
                     }
                     else {
                         System.out.println("You got it right, on to the next one!"); // Not final question
