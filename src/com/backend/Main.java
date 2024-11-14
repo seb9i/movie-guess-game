@@ -19,6 +19,7 @@ public class Main {
         for (HashMap<String, String> i: movieMultipleChoice){
             multipleChoiceString += i.get("title") + "\n";
         }
+        multipleChoiceString += "";
 
         // Questions that will be asked
         ArrayList<QuestionAnswer> questions = new ArrayList<>();
