@@ -39,7 +39,7 @@ public class Main {
             boolean result = false;
 
             while (!(result)){
-                System.out.println(question);
+                m.setQuestionText(question.returnQuestion());
                 if (tries == 0){ // No tries left
                     System.out.println("Sorry, you lost!");
                     break;
