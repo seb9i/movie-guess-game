@@ -8,28 +8,23 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args){
         Scanner scan = new Scanner(System.in);
 
         HashMap<String, String> randomMovie = Movie.returnMovieData(); // The movie that the user has to guess
         ArrayList<HashMap<String, String>> movieMultipleChoice = Movie.returnMovieData(4, String.valueOf(randomMovie.get("imdb_id"))); // List of random movies including the one user has to guess
 
-        // To store list of movies in multiple choice format
-        String multipleChoiceString = "";
-        for (HashMap<String, String> i: movieMultipleChoice){
-            multipleChoiceString += i.get("title") + "\n";
-        }
-        multipleChoiceString += "";
+
 
         // Questions that will be asked
         ArrayList<QuestionAnswer> questions = new ArrayList<>();
-        questions.add(new QuestionAnswer("What is the name of this movie? (choose one):\n" + multipleChoiceString,randomMovie.get("title")));
+        questions.add(new QuestionAnswer("What is the name of this movie? (choose one)",randomMovie.get("title")));
         questions.add(new QuestionAnswer("What year was this movie released?", randomMovie.get("release_year")));
         questions.add(new QuestionAnswer("What is the average rating of the movie?", randomMovie.get("vote_average")));
 
 
         int tries = 6;
-        PictureFrame m = new PictureFrame("Hello", randomMovie.get("movie_image_url"));
+        PictureFrame m = new PictureFrame("Hello", randomMovie.get("movie_image_url"), movieMultipleChoice);
 
         Iterator<QuestionAnswer> iterator = questions.iterator();
 
