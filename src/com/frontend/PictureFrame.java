@@ -1,23 +1,48 @@
 package com.frontend;
 
 import com.backend.Movie;
+import com.backend.QuestionAnswer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
-public class PictureFrame extends JFrame implements Runnable {
+public class PictureFrame extends JFrame implements Runnable, ActionListener {
 
-
+    // Picture and Two Labels
     private PicturePanel p;
     JLabel infoLabel;
     JLabel infoLabel2;
-    public PictureFrame(String display, String url, ArrayList<HashMap<String, String>> movieMultipleChoice ) {
+    JPanel buttonPanel;
+    Insets insets;
+    String url;
+    int tries;
+    JTextField textField;
+    JButton buttonCheck;
+
+    ArrayList<QuestionAnswer> questions = new ArrayList<>();
+
+    HashMap<String, String> randomMovie;
+    ArrayList<HashMap<String, String>> movieMultipleChoice;
+
+    public PictureFrame(String display) {
+
+
         super(display);
-        Insets insets = new Insets(1, 4, 1, 4);
+        insets = new Insets(1, 4, 1, 4);
         int frameWidth = 1280;
         int frameHeight = 720;
+
+        // Movie
+        randomMovie = Movie.returnMovieData();
+        movieMultipleChoice = Movie.returnMovieData(4, String.valueOf(randomMovie.get("imdb_id")));
+        url = randomMovie.get("movie_image_url");
+        tries = 6;
+
 
         // Layout of the frame
         setLayout(new GridBagLayout());
@@ -61,36 +86,39 @@ public class PictureFrame extends JFrame implements Runnable {
         this.add(p, new GridBagConstraints(1, 1, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER,
                 GridBagConstraints.NONE, insets, 0, 0));
 
-
         // Buttons for first question (multiple choice)
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel = new JPanel(new GridBagLayout());
         for (int i = 0; i < movieMultipleChoice.size(); i++){
             JButton button = new JButton(movieMultipleChoice.get(i).get("title"));
             GridBagConstraints gbc = new GridBagConstraints(i, 0, 1, 1, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0);
-            button.addActionListener(e -> {
-                JButton sourceButton = (JButton) e.getSource();
-                System.out.println("You clicked " + sourceButton.getText());
-            });
+            button.addActionListener(this);
             buttonPanel.add(button, gbc);
+            button.setName("multiple");
         }
         add(buttonPanel, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
-        buttonPanel.setVisible(false);
 
-        JButton button = new JButton("Submit");
-        JTextField textField = new JTextField();
+        buttonCheck = new JButton("Submit");
+        buttonCheck.setName("Date");
+        buttonCheck.addActionListener(this);
+        textField = new JTextField();
         textField.setPreferredSize(new Dimension(200, 50));
-        add(button, new GridBagConstraints(1, 5, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
+        add(buttonCheck, new GridBagConstraints(1, 5, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
         add(textField, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
+        buttonCheck.setVisible(false);
+        textField.setVisible(false);
 
-        button.addActionListener(e -> {
-            JButton sourceButton = (JButton) e.getSource();
-            System.out.println("You entered " + textField.getText());
-        });
+
+
         // Refresh and show frame
         revalidate();
         repaint();
         setVisible(true);
 
+    }
+    public void initializeQuestions(){
+        questions.add(new QuestionAnswer("What is the name of this movie? (choose one)",randomMovie.get("title")));
+        questions.add(new QuestionAnswer("What year was this movie released?", randomMovie.get("release_year")));
+        questions.add(new QuestionAnswer("What is the average rating of the movie?", randomMovie.get("vote_average")));
     }
     public void setImageUrl(String urls){
         p.setImageUrl(urls);
@@ -101,8 +129,45 @@ public class PictureFrame extends JFrame implements Runnable {
 
 
 
+
+
     @Override
     public void run() {
+        if (tries == 0){
+            System.out.println("no");
+        }
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton actionButton = (JButton) e.getSource();
+        System.out.println("hi");
+        if (actionButton.getName().equals("multiple")){
+            if (actionButton.getText().equals(randomMovie.get("title"))) {
+                buttonPanel.setVisible(false);
+                buttonCheck.setVisible(true);
+                textField.setVisible(true);
+                this.setQuestionText("what year was the movie released");
+            }
+            else {
+                tries -= 1;
+                if (tries == 0) {
+                    System.out.println("YOU LOST!!!!!");
+                    System.exit(0);
+                }
+            }
+        }
+        if (actionButton.getName().equals("Date")) {
+            if (textField.getText().equals(randomMovie.get("release_year"))){
+                System.out.printf("YES!!");
+            }
+            else {
+                tries -= 1;
+                if (tries == 0) {
+                    System.exit(0);
+
+                }
+            }
+        }
     }
 }
