@@ -1,6 +1,7 @@
 package com.frontend;
 import com.backend.Movie;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +24,11 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
     JButton buttonCheck;
     double movieRating;
     double marginOfError;
+    Font font;
+    JButton tryAgain;
+    String releaseDate;
+    String overview;
+    JLabel description;
 
 
 
@@ -56,14 +62,9 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         };
         setContentPane(jp);
 
-        Font font = new Font("Lucida Bright", Font.PLAIN, 16);
-        // Movie
-        randomMovie = Movie.returnMovieData();
-        movieMultipleChoice = Movie.returnMovieData(4, String.valueOf(randomMovie.get("imdb_id")));
-        url = randomMovie.get("movie_image_url");
-        tries = 6;
-        movieRating = Double.parseDouble(randomMovie.get("vote_average"));
-        marginOfError = movieRating * 0.05;
+        font = new Font("Eurostile Extended", Font.PLAIN, 16);
+
+        initializeMovie();
 
         // Layout of the frame
         setLayout(new GridBagLayout());
@@ -79,7 +80,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         infoLabel2 = new JLabel();
         infoLabel2.setFont(font);
         infoLabel2.setForeground(Color.WHITE);
-        infoLabel2.setText("Movie Guess Game");
+        infoLabel2.setText("Guess The Movie");
 
         panel3.add(infoLabel2);
         this.add(panel3, new GridBagConstraints(1, 0, 3, 1, 1.0, 1.0, GridBagConstraints.NORTH,
@@ -88,15 +89,18 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
 
         // Game Question
         JPanel panel2 = new JPanel();
-        panel2.setBackground(new Color(0, 0, 0));
+        panel2.setBackground(new Color(34, 17, 66, 255));
 
-        infoLabel = new JLabel();
-        infoLabel.setText("What is the name of this movie?");
+        infoLabel = new JLabel("What is the name of this movie?");
         infoLabel.setFont(font);
-        infoLabel.setForeground(Color.WHITE);
+        infoLabel.setForeground(new Color(145, 93, 240));
+        panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel2.add(infoLabel);
-        this.add(panel2, new GridBagConstraints(1, 2, 3, 1, 1.0, 1.0, GridBagConstraints.NORTH,
+        panel2.setPreferredSize(new Dimension(50, 5));
+        this.add(panel2, new GridBagConstraints(1, 2, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER,
                 GridBagConstraints.BOTH, insets, 0, 30));
+
+
 
         // Movie Picture Handling
         p = new PicturePanel(url);
@@ -105,23 +109,22 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         this.add(p, new GridBagConstraints(1, 1, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER,
                 GridBagConstraints.NONE, insets, 0, 0));
 
-        // Buttons for first question (multiple choice)
+        // Buttons for first question (multiple choice)4
         buttonPanel = new JPanel(new GridBagLayout());
-        for (int i = 0; i < movieMultipleChoice.size(); i++){
-            JButton button = new JButton(movieMultipleChoice.get(i).get("title"));
-            GridBagConstraints gbc = new GridBagConstraints(i, 0, 1, 1, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0);
-            button.addActionListener(this);
-            buttonPanel.add(button, gbc);
-            button.setName("multiple");
-        }
-        add(buttonPanel, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
+        buttonPanel.setOpaque(false);
+        initializeMultipleChoice();
 
         // Typed Answers
         buttonCheck = new JButton("Submit");
         buttonCheck.setName("Date");
+        buttonCheck.setBackground(new Color(47, 4, 99));
+        buttonCheck.setForeground(new Color(236, 166, 237));
+        RoundedBorder purpleLineBorder = new RoundedBorder(new Color(143, 19, 145), 12);
+        Border emptyBorder = BorderFactory.createEmptyBorder(buttonCheck.getBorder().getBorderInsets(buttonCheck).top, buttonCheck.getBorder().getBorderInsets(buttonCheck).left, buttonCheck.getBorder().getBorderInsets(buttonCheck).bottom, buttonCheck.getBorder().getBorderInsets(buttonCheck).right);
+        buttonCheck.setBorder(BorderFactory.createCompoundBorder(purpleLineBorder, emptyBorder));
         buttonCheck.addActionListener(this);
         textField = new JTextField();
-        textField.setPreferredSize(new Dimension(200, 50));
+        textField.setPreferredSize(new Dimension(200, 35));
         add(buttonCheck, new GridBagConstraints(1, 5, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
         add(textField, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
         buttonCheck.setVisible(false);
@@ -140,7 +143,37 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
     public void setQuestionText(String text){
         infoLabel.setText(text);
     }
+    public void initializeMultipleChoice(){
+        buttonPanel.removeAll();
+        for (int i = 0; i < movieMultipleChoice.size(); i++){
+            JButton button = new JButton(movieMultipleChoice.get(i).get("title"));
+            button.setBackground(new Color(47, 4, 99));
+            button.setForeground(new Color(236, 166, 237));
+            button.setFocusPainted(false);
+            RoundedBorder purpleLineBorder = new RoundedBorder(new Color(143, 19, 145), 12);
+            Border emptyBorder = BorderFactory.createEmptyBorder(button.getBorder().getBorderInsets(button).top, button.getBorder().getBorderInsets(button).left, button.getBorder().getBorderInsets(button).bottom, button.getBorder().getBorderInsets(button).right);
+            GridBagConstraints gbc = new GridBagConstraints(i, 0, 1, 1, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0);
+            button.setBorder(BorderFactory.createCompoundBorder(purpleLineBorder, emptyBorder));
+            button.addActionListener(this);
+            buttonPanel.add(button, gbc);
+            button.setName("multiple");
+        }
+        add(buttonPanel, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
+        buttonPanel.revalidate();
+        buttonPanel.repaint();
+    }
 
+    public void initializeMovie(){
+        // Movie
+        randomMovie = Movie.returnMovieData();
+        releaseDate = randomMovie.get("release_year");
+        movieMultipleChoice = Movie.returnMovieData(4, String.valueOf(randomMovie.get("imdb_id")));
+        url = randomMovie.get("movie_image_url");
+        tries = 6;
+        movieRating = Double.parseDouble(randomMovie.get("vote_average"));
+        marginOfError = movieRating * 0.05;
+        overview = randomMovie.get("overview");
+    }
     @Override
     public void run() {
         if (tries == 0){
@@ -151,31 +184,32 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton actionButton = (JButton) e.getSource();
+        String decade = "'" + releaseDate.substring(2, 3) + "0s";
         if (actionButton.getName().equals("multiple")){
             if (actionButton.getText().equals(randomMovie.get("title"))) {
                 buttonPanel.setVisible(false);
                 buttonCheck.setVisible(true);
                 textField.setVisible(true);
-                this.setQuestionText("what year was the movie released");
+                this.setQuestionText("<html>What year was this movie released? <font color=#1be0dd>Hint:" + " the " + decade + "</font></html>");
             }
-            else {
+            else  {
                 tries -= 1;
                 if (tries == 0) {
                     System.out.println("YOU LOST!!!!!");
-                    System.exit(0);
+                    tryAgain("multiple");
                 }
             }
         }
         if (actionButton.getName().equals("Date")) {
-            if (textField.getText().trim().equals(randomMovie.get("release_year"))){
+            if (textField.getText().trim().equals(releaseDate)){
                 buttonCheck.setName("Rating");
                 textField.setText(null);
-                this.setQuestionText("what is the average rating of the movie (you have a 5% margin of error)");
+                this.setQuestionText("<html> What is the average rating of the movie <font color = #eb2005>(you have a 5% margin of error)</font> </html>");
             }
             else {
                 tries -= 1;
                 if (tries == 0) {
-                    System.exit(0);
+                    tryAgain("date");
 
                 }
             }
@@ -185,14 +219,72 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             System.out.println(movieRating - marginOfError);
             if ((answer >= movieRating - marginOfError) && (answer <= movieRating + marginOfError)){
                 setQuestionText("WINNER");
+                textField.setText(null);
+                tryAgain("Rating");
                 setImageUrl(randomMovie.get("movie_poster_url"));
             }
             else {
                 tries -= 1;
                 if (tries == 0) {
-                    System.exit(0);
+                    tryAgain("rating");
                 }
             }
+        }
+        if (actionButton.getName().equals("restart")){
+            initializeMovie();
+            initializeMultipleChoice();
+            p.setImageUrl(url);
+            tryAgain.setVisible(false);
+            buttonPanel.setVisible(true);
+        }
+    }
+    public void tryAgain(String currentQuestion){
+        tryAgain = new JButton();
+        tryAgain.setText("Try Again");
+        tryAgain.setPreferredSize(new Dimension(2, 30));
+        tryAgain.setBackground(Color.green);
+        tryAgain.setFont(font);
+        tryAgain.setForeground(Color.white);
+        tryAgain.setName("restart");
+        tryAgain.addActionListener(this);
+
+        if (currentQuestion.equals("multiple")){
+            buttonPanel.setVisible(false);
+        }
+        else {
+            buttonCheck.setName("Date");
+            buttonCheck.setVisible(false);
+            textField.setVisible(false);
+        }
+        add(tryAgain, new GridBagConstraints(1, 5, 0, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
+
+
+
+    }
+    private static class RoundedBorder implements Border {
+
+        private int radius = 10;
+        private Color color;
+
+        private RoundedBorder(Color color, int radius) {
+            this.color = color;
+            this.radius = radius;
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius + 1, this.radius + 1, this.radius + 1, this.radius + 1);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return true;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.setColor(color);
+            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
         }
     }
 
