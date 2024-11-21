@@ -188,7 +188,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
 
     public void initializeMovie(){
         // Movie
-        randomMovie = Movie.returnMovieData("tt1262426");
+        randomMovie = Movie.returnMovieData();
         releaseDate = randomMovie.get("release_year");
         movieMultipleChoice = Movie.returnMovieData(4, String.valueOf(randomMovie.get("imdb_id")));
         url = randomMovie.get("movie_image_url");
@@ -266,6 +266,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             buttonPanel.setVisible(true);
             description.setText("<html>" + overview + "</html>");
             description.setVisible(false);
+            setQuestionText("What is the name of this movie?");
+
             p.setPreferredSize(new Dimension(780, 400));  // Set the preferred size for the panel
 
         }
