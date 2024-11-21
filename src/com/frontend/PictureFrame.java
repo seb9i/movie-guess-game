@@ -30,6 +30,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
     String overview;
     JLabel description;
     GridBagConstraints gbc;
+    JLabel infoLabel3;
 
 
 
@@ -45,6 +46,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         int frameHeight = 720;
         gbc = new GridBagConstraints();
         setBackground(new Color(0, 0, 0));
+        setResizable(false);
 
         JPanel jp = new JPanel() {
             @Override
@@ -81,9 +83,16 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         infoLabel2 = new JLabel();
         infoLabel2.setFont(titlefont);
         infoLabel2.setForeground(Color.WHITE);
-        infoLabel2.setText("Guess The Movie");
+        infoLabel2.setText("<html>Guess The Movie &emsp;&emsp;</html> ");
+        infoLabel3 = new JLabel();
+        infoLabel3.setFont(titlefont);
+
+        infoLabel3.setForeground(Color.RED);
+
+        infoLabel3.setText("Tries " + String.valueOf(tries));
 
         panel3.add(infoLabel2);
+        panel3.add(infoLabel3);
         this.add(panel3, new GridBagConstraints(1, 0, 3, 1, 1.0, 1.0, GridBagConstraints.NORTH,
                 GridBagConstraints.BOTH, insets, 0, 0));
 
@@ -180,7 +189,6 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             buttonPanel.add(button, gbc);
             button.setName("multiple");
         }
-        System.out.println(randomMovie.get("imdb_id"));
         add(buttonPanel, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
         buttonPanel.revalidate();
         buttonPanel.repaint();
@@ -188,7 +196,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
 
     public void initializeMovie(){
         // Movie
-        randomMovie = Movie.returnMovieData("tt1262426");
+        randomMovie = Movie.returnMovieData();
         releaseDate = randomMovie.get("release_year");
         movieMultipleChoice = Movie.returnMovieData(4, String.valueOf(randomMovie.get("imdb_id")));
         url = randomMovie.get("movie_image_url");
@@ -217,6 +225,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             }
             else  {
                 tries -= 1;
+                infoLabel3.setText("Tries " + String.valueOf(tries));
                 if (tries == 0) {
                     setQuestionText("You ran out of tries!");
                     tryAgain("multiple");
@@ -231,6 +240,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             }
             else {
                 tries -= 1;
+                infoLabel3.setText("Tries " + String.valueOf(tries));
                 if (tries == 0) {
                     setQuestionText("You ran out of tries!");
                     tryAgain("date");
@@ -239,8 +249,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             }
         }
         if (actionButton.getName().equals("Rating")){
+            System.out.println(movieRating);
             double answer = Double.parseDouble(textField.getText());
-            System.out.println(movieRating - marginOfError);
             if ((answer >= movieRating - marginOfError) && (answer <= movieRating + marginOfError)){
                 setQuestionText("WINNER");
                 description.setVisible(true);
@@ -251,6 +261,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             }
             else {
                 tries -= 1;
+                infoLabel3.setText("Tries " + String.valueOf(tries));
+
                 if (tries == 0) {
                     setQuestionText("You ran out of tries!");
                     tryAgain("rating");
@@ -259,7 +271,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         }
         if (actionButton.getName().equals("restart")){
             initializeMovie();
-
+            infoLabel3.setText("Tries " + String.valueOf(tries));
+            setQuestionText("What is the name of this movie?");
             initializeMultipleChoice();
             p.setImageUrl(url);
             tryAgain.setVisible(false);
