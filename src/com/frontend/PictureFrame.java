@@ -29,6 +29,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
     String releaseDate;
     String overview;
     JLabel description;
+    GridBagConstraints gbc;
 
 
 
@@ -42,7 +43,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         insets = new Insets(1, 4, 1, 4);
         int frameWidth = 1280;
         int frameHeight = 720;
-
+        gbc = new GridBagConstraints();
         setBackground(new Color(0, 0, 0));
 
         JPanel jp = new JPanel() {
@@ -62,8 +63,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         };
         setContentPane(jp);
 
-        font = new Font("Eurostile Extended", Font.PLAIN, 16);
-
+        font = new Font("Eurostile Extended", Font.PLAIN, 14);
+        Font titlefont = font.deriveFont(Font.PLAIN, 19);
         initializeMovie();
 
         // Layout of the frame
@@ -78,7 +79,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         JPanel panel3 = new JPanel();
         panel3.setOpaque(false);
         infoLabel2 = new JLabel();
-        infoLabel2.setFont(font);
+        infoLabel2.setFont(titlefont);
         infoLabel2.setForeground(Color.WHITE);
         infoLabel2.setText("Guess The Movie");
 
@@ -92,7 +93,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         panel2.setBackground(new Color(34, 17, 66, 255));
 
         infoLabel = new JLabel("What is the name of this movie?");
-        infoLabel.setFont(font);
+        panel2.setOpaque(false);
+        infoLabel.setFont(titlefont);
         infoLabel.setForeground(new Color(145, 93, 240));
         panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel2.add(infoLabel);
@@ -101,15 +103,26 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
                 GridBagConstraints.BOTH, insets, 0, 30));
 
 
-
         // Movie Picture Handling
         p = new PicturePanel(url);
         p.setOpaque(false);
-        p.setPreferredSize(new Dimension(800, 500));  // Set the preferred size for the panel
-        this.add(p, new GridBagConstraints(1, 1, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, insets, 0, 0));
+        Insets d = new Insets(10, 10, 10, 10);
+        p.setPreferredSize(new Dimension(780, 400));  // Set the preferred size for the panel
+        this.add(p, new GridBagConstraints(1, 1, 1, 1, 1, 1.0, GridBagConstraints.CENTER,
+                GridBagConstraints.NONE, d, 0, 0));
+        description = new JLabel("<html>" + overview + "</html>");
+        description.setPreferredSize(new Dimension(300, 500)); // Enough space for text
+        description.setFont(titlefont);
+        description.setForeground(new Color(238, 187, 239, 255));
+        description.setVisible(false);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.weightx = 0.5;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        this.add(description, gbc);
 
-        // Buttons for first question (multiple choice)4
+        // Buttons for first question (multiple choice)
         buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setOpaque(false);
         initializeMultipleChoice();
@@ -117,16 +130,24 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         // Typed Answers
         buttonCheck = new JButton("Submit");
         buttonCheck.setName("Date");
+        buttonCheck.setFont(font);
         buttonCheck.setBackground(new Color(47, 4, 99));
         buttonCheck.setForeground(new Color(236, 166, 237));
+        buttonCheck.setPreferredSize(new Dimension(400, 50));
         RoundedBorder purpleLineBorder = new RoundedBorder(new Color(143, 19, 145), 12);
         Border emptyBorder = BorderFactory.createEmptyBorder(buttonCheck.getBorder().getBorderInsets(buttonCheck).top, buttonCheck.getBorder().getBorderInsets(buttonCheck).left, buttonCheck.getBorder().getBorderInsets(buttonCheck).bottom, buttonCheck.getBorder().getBorderInsets(buttonCheck).right);
         buttonCheck.setBorder(BorderFactory.createCompoundBorder(purpleLineBorder, emptyBorder));
         buttonCheck.addActionListener(this);
         textField = new JTextField();
-        textField.setPreferredSize(new Dimension(200, 35));
-        add(buttonCheck, new GridBagConstraints(1, 5, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
-        add(textField, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
+        textField.setPreferredSize(new Dimension(500, 50));
+        textField.setFont(font);
+        textField.setBackground(new Color(0x200B35));
+        textField.setForeground(Color.WHITE);
+        emptyBorder = BorderFactory.createEmptyBorder();
+        textField.setBorder(BorderFactory.createCompoundBorder(purpleLineBorder, emptyBorder));
+
+        add(buttonCheck, new GridBagConstraints(1, 5, 3, 1, 0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.NONE, insets, 0, 0));
+        add(textField, new GridBagConstraints(1, 4, 3, 1, 0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.NONE, insets, 0, 0));
         buttonCheck.setVisible(false);
         textField.setVisible(false);
 
@@ -150,14 +171,16 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             button.setBackground(new Color(47, 4, 99));
             button.setForeground(new Color(236, 166, 237));
             button.setFocusPainted(false);
-            RoundedBorder purpleLineBorder = new RoundedBorder(new Color(143, 19, 145), 12);
+            button.setFont(font);
+            RoundedBorder purpleLineBorder = new RoundedBorder(new Color(95, 29, 145), 12);
             Border emptyBorder = BorderFactory.createEmptyBorder(button.getBorder().getBorderInsets(button).top, button.getBorder().getBorderInsets(button).left, button.getBorder().getBorderInsets(button).bottom, button.getBorder().getBorderInsets(button).right);
-            GridBagConstraints gbc = new GridBagConstraints(i, 0, 1, 1, 1, 1, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0);
+            GridBagConstraints gbc = new GridBagConstraints(i, 0, 1, 1, 0, 1, GridBagConstraints.SOUTH, GridBagConstraints.NONE, insets, 0, 0);
             button.setBorder(BorderFactory.createCompoundBorder(purpleLineBorder, emptyBorder));
             button.addActionListener(this);
             buttonPanel.add(button, gbc);
             button.setName("multiple");
         }
+        System.out.println(randomMovie.get("imdb_id"));
         add(buttonPanel, new GridBagConstraints(1, 4, 3, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
         buttonPanel.revalidate();
         buttonPanel.repaint();
@@ -165,7 +188,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
 
     public void initializeMovie(){
         // Movie
-        randomMovie = Movie.returnMovieData();
+        randomMovie = Movie.returnMovieData("tt1262426");
         releaseDate = randomMovie.get("release_year");
         movieMultipleChoice = Movie.returnMovieData(4, String.valueOf(randomMovie.get("imdb_id")));
         url = randomMovie.get("movie_image_url");
@@ -195,7 +218,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             else  {
                 tries -= 1;
                 if (tries == 0) {
-                    System.out.println("YOU LOST!!!!!");
+                    setQuestionText("You ran out of tries!");
                     tryAgain("multiple");
                 }
             }
@@ -204,11 +227,12 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             if (textField.getText().trim().equals(releaseDate)){
                 buttonCheck.setName("Rating");
                 textField.setText(null);
-                this.setQuestionText("<html> What is the average rating of the movie <font color = #eb2005>(you have a 5% margin of error)</font> </html>");
+                this.setQuestionText("<html> What is the average rating of the movie? <font color = #eb2005>(you have a 5% margin of error)</font> </html>");
             }
             else {
                 tries -= 1;
                 if (tries == 0) {
+                    setQuestionText("You ran out of tries!");
                     tryAgain("date");
 
                 }
@@ -219,6 +243,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             System.out.println(movieRating - marginOfError);
             if ((answer >= movieRating - marginOfError) && (answer <= movieRating + marginOfError)){
                 setQuestionText("WINNER");
+                description.setVisible(true);
+                p.setPreferredSize(new Dimension(342, 500));
                 textField.setText(null);
                 tryAgain("Rating");
                 setImageUrl(randomMovie.get("movie_poster_url"));
@@ -226,23 +252,29 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
             else {
                 tries -= 1;
                 if (tries == 0) {
+                    setQuestionText("You ran out of tries!");
                     tryAgain("rating");
                 }
             }
         }
         if (actionButton.getName().equals("restart")){
             initializeMovie();
+
             initializeMultipleChoice();
             p.setImageUrl(url);
             tryAgain.setVisible(false);
             buttonPanel.setVisible(true);
+            description.setText("<html>" + overview + "</html>");
+            description.setVisible(false);
+            p.setPreferredSize(new Dimension(780, 400));  // Set the preferred size for the panel
+
         }
     }
     public void tryAgain(String currentQuestion){
         tryAgain = new JButton();
         tryAgain.setText("Try Again");
         tryAgain.setPreferredSize(new Dimension(2, 30));
-        tryAgain.setBackground(Color.green);
+        tryAgain.setBackground(new Color(0x0C7D0C));
         tryAgain.setFont(font);
         tryAgain.setForeground(Color.white);
         tryAgain.setName("restart");
@@ -254,6 +286,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener {
         else {
             buttonCheck.setName("Date");
             buttonCheck.setVisible(false);
+            textField.setText(null);
             textField.setVisible(false);
         }
         add(tryAgain, new GridBagConstraints(1, 5, 0, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
