@@ -136,9 +136,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
 
         infoLabel3 = new JLabel();
         infoLabel3.setFont(titlefont);
-        
 
-        infoLabel3.setForeground(Color.YELLOW);
+        infoLabel3.setForeground(Color.RED);
 
         infoLabel3.setText("Tries: " + String.valueOf(tries)); // Displaying Tries
 
