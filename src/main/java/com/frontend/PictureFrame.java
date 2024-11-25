@@ -64,7 +64,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
     private List<Color> colors;
     private int currentColorIndex = 0;
     Timer timer;
-
+    private String title;
 
     JButton enteredButton; // For button hovering
 
@@ -133,12 +133,13 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         infoLabel2.setFont(titlefont);
         infoLabel2.setForeground(Color.WHITE);
         infoLabel2.setText("<html>Guess The Movie &emsp;&emsp;</html> ");
+
         infoLabel3 = new JLabel();
         infoLabel3.setFont(titlefont);
 
         infoLabel3.setForeground(Color.RED);
 
-        infoLabel3.setText("Tries " + String.valueOf(tries)); // Displaying Tries
+        infoLabel3.setText("Tries: " + String.valueOf(tries)); // Displaying Tries
 
         panel3.add(infoLabel2);
         panel3.add(infoLabel3);
@@ -167,7 +168,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
 
 
         // Overview Design
-        description = new JLabel("<html>" + overview + "</html>");
+        description = new JLabel("<html><body><p style=\"color:white; font-size: 30px;\">" + title + "<br><br><p style=\"color:#eebbef;\">" + overview + "</p></body></html>");
         description.setPreferredSize(new Dimension(300, 500)); // Enough space for text
         description.setFont(titlefont);
         description.setForeground(new Color(238, 187, 239, 255));
@@ -312,6 +313,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         movieRating = Double.parseDouble(randomMovie.get("vote_average"));
         marginOfError = movieRating * 0.05;
         overview = randomMovie.get("overview");
+        title = randomMovie.get("title");
     }
     @Override
     public void run() {
@@ -371,7 +373,6 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        playSound("src/main/java/videos/cursor.wav");
         JButton actionButton = (JButton) e.getSource();
         String decade = "'" + releaseDate.substring(2, 3) + "0s";
         if (actionButton.getName().equals("multiple")){
@@ -383,6 +384,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
             }
             else  {
                 tries -= 1;
+                infoLabel3.setText("Tries: " + String.valueOf(tries));
                 if (tries == 0) {
                     setQuestionText("You ran out of tries!");
                     tryAgain("multiple");
@@ -393,10 +395,12 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
             if (textField.getText().trim().equals(releaseDate)){
                 buttonCheck.setName("Rating");
                 textField.setText(null);
-                this.setQuestionText("<html> What is the average rating of the movie? <font color = #eb2005>(you have a 5% margin of error)</font> </html>");
+                this.setQuestionText("<html> What is the average rating of the movie? (i.e 6.4) <font color = #eb2005>(you have a 5% margin of error)</font> </html>");
             }
             else {
                 tries -= 1;
+                infoLabel3.setText("Tries: " + String.valueOf(tries));
+
                 if (tries == 0) {
                     setQuestionText("You ran out of tries!");
                     tryAgain("date");
@@ -410,6 +414,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
                 playSound("src/main/java/videos/tropy.wav");
                 setQuestionText("WINNER");
                 description.setVisible(true);
+
                 p.setPreferredSize(new Dimension(342, 500));
                 textField.setText(null);
                 tryAgain("Rating");
@@ -417,6 +422,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
             }
             else {
                 tries -= 1;
+                infoLabel3.setText("Tries: " + String.valueOf(tries));
+
                 if (tries == 0) {
                     setQuestionText("You ran out of tries!");
                     tryAgain("rating");
@@ -432,7 +439,9 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
             buttonPanel.setVisible(true);
             description.setText("<html>" + overview + "</html>");
             description.setVisible(false);
+
             setQuestionText("What is the name of this movie?");
+            infoLabel3.setText("Tries: " + String.valueOf(tries));
 
             p.setPreferredSize(new Dimension(780, 400));  // Set the preferred size for the panel
 
