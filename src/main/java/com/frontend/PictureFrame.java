@@ -2,6 +2,7 @@ package com.frontend;
 import com.backend.Movie;
 import com.sun.jna.platform.WindowUtils;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
@@ -95,6 +96,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         // PS3 Font
         font = new Font("SCE-PS3 Rodin LATIN Regular", Font.PLAIN, 16);
         titlefont = font.deriveFont(Font.PLAIN, 19);
+        // titlefont = new Font("Mata Cond", Font.BOLD,)
         initializeMovie();
 
         // Layout of the frame
@@ -115,6 +117,8 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         play();
 
         mediaPlayerComponent.mediaPlayer().overlay().enable(true);
+        mediaPlayerComponent.mediaPlayer().controls().setRepeat(true);
+
 
 
         initializeOverlay();
@@ -137,7 +141,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         infoLabel3 = new JLabel();
         infoLabel3.setFont(titlefont);
 
-        infoLabel3.setForeground(Color.RED);
+        infoLabel3.setForeground(Color.YELLOW);
 
         infoLabel3.setText("Tries: " + String.valueOf(tries)); // Displaying Tries
 
@@ -168,7 +172,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
 
 
         // Overview Design
-        description = new JLabel("<html><body><p style=\"color:white; font-size: 30px;\">" + title + "<br><br><p style=\"color:#eebbef;\">" + overview + "</p></body></html>");
+        description = new JLabel("<html><body><p style=\"color:white; font-size: 27px;\">" + title + "<br><br><p style=\"color:#eebbef;\">" + overview + "</p></body></html>");
         description.setPreferredSize(new Dimension(300, 500)); // Enough space for text
         description.setFont(titlefont);
         description.setForeground(new Color(238, 187, 239, 255));
@@ -481,8 +485,4 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         overlayWindow.getContentPane().add(tryAgain, new GridBagConstraints(1, 5, 0, 1, 1.0, 0.0, GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL, insets, 0, 0));
     }
 
-
-
-
-
-    }
+}

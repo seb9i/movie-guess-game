@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 
 
-public class FileHandle {
+public class  FileHandle {
     /**
      * This method converts a line separated text file into an ArrayList
      * @param fileName path to the file
