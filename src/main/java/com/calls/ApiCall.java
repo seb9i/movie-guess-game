@@ -6,6 +6,11 @@ import java.net.http.HttpClient;
 import java.io.IOException;
 import java.net.URI;
 public class ApiCall {
+    /**
+     * Function for HTTP get requests.
+     * @param url Url that you want to use.
+     * @return Response body as a string.
+     */
     public static HttpResponse<String> get (String url){
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))

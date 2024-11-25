@@ -9,8 +9,7 @@ import java.util.*;
 
 public class Movie {
     private HttpResponse<String> movieData;
-    private static final ArrayList<String> lines = FileHandle.getFileData("src/movies/movielist.txt"); // List of movie ids
-
+    private static final ArrayList<String> lines = FileHandle.getFileData("src/main/java/movies/movielist.txt"); // List of movie ids
 
     /**
      * This method is the foundational block of this program, it returns the metadata of any IMDB movie given its id.

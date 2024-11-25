@@ -5,7 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+
 public class FileHandle {
+    /**
+     * This method converts a line separated text file into an ArrayList
+     * @param fileName path to the file
+     * @return ArrayList of elements from filename
+     */
     public static ArrayList<String> getFileData(String fileName) {
         ArrayList<String> fileData = new ArrayList<String>();
         try {
