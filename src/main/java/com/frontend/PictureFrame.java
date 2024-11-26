@@ -136,7 +136,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         infoLabel2 = new JLabel();
         infoLabel2.setFont(titlefont);
         infoLabel2.setForeground(Color.WHITE);
-        infoLabel2.setText("<html>Guess The Movie &emsp;&emsp;</html> ");
+        infoLabel2.setText("<html><span style='font-size:20px;'>Guess The Movie &emsp;</span></html>");
 
         infoLabel3 = new JLabel();
         infoLabel3.setFont(titlefont);
@@ -146,7 +146,19 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         infoLabel3.setText("Tries: " + String.valueOf(tries)); // Displaying Tries
 
         panel3.add(infoLabel2);
-        panel3.add(infoLabel3);
+        panel3.add(infoLabel3, new GridBagConstraints(
+                4,
+                0,
+                1,
+                1,
+                1.0,
+                1.0,
+                GridBagConstraints.NORTH,
+                GridBagConstraints.BOTH,
+                new Insets(insets.top, insets.left + 20, insets.bottom, insets.right),
+                30,
+                0
+        ));
         overlayWindow.getContentPane().add(panel3, new GridBagConstraints(1, 0, 3, 1, 1.0, 1.0, GridBagConstraints.NORTH,
                 GridBagConstraints.BOTH, insets, 0, 0));
 
