@@ -49,7 +49,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
 
     JTextField textField;
     Font font;
-    Font titlefont;
+    Font titleFont;
 
     // Buttons
     JButton tryAgain;
@@ -65,6 +65,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
     private List<Color> colors;
     private int currentColorIndex = 0;
     Timer timer;
+    Timer titleTimer;
     private String title;
 
     JButton enteredButton; // For button hovering
@@ -95,7 +96,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
 
         // PS3 Font
         font = new Font("SCE-PS3 Rodin LATIN Regular", Font.PLAIN, 16);
-        titlefont = font.deriveFont(Font.PLAIN, 19);
+        titleFont = font.deriveFont(Font.PLAIN, 19);
         // titlefont = new Font("Mata Cond", Font.BOLD,)
         initializeMovie();
 
@@ -134,31 +135,29 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         JPanel panel3 = new JPanel();
         panel3.setOpaque(false);
         infoLabel2 = new JLabel();
-        infoLabel2.setFont(titlefont);
+        infoLabel2.setFont(titleFont);
         infoLabel2.setForeground(Color.WHITE);
         infoLabel2.setText("<html><span style='font-size:20px;'>Guess The Movie &emsp;</span></html>");
+        titleTimer = new Timer(25, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent d) {
+                // Change the label's color
+                infoLabel2.setForeground(colors.get(currentColorIndex));
+                currentColorIndex = (currentColorIndex + 1) % colors.size(); // Cycle through colors
+            }
+        });
+
+        titleTimer.start();
 
         infoLabel3 = new JLabel();
-        infoLabel3.setFont(titlefont);
+        infoLabel3.setFont(titleFont);
 
         infoLabel3.setForeground(Color.YELLOW);
 
-        infoLabel3.setText("Tries: " + String.valueOf(tries)); // Displaying Tries
+        infoLabel3.setText("<html><span style='font-size:20px;'>Tries: " + String.valueOf(tries) + "</html>"); // Displaying Tries
 
         panel3.add(infoLabel2);
-        panel3.add(infoLabel3, new GridBagConstraints(
-                4,
-                0,
-                1,
-                1,
-                1.0,
-                1.0,
-                GridBagConstraints.NORTH,
-                GridBagConstraints.BOTH,
-                new Insets(insets.top, insets.left + 20, insets.bottom, insets.right),
-                30,
-                0
-        ));
+        panel3.add(infoLabel3);
         overlayWindow.getContentPane().add(panel3, new GridBagConstraints(1, 0, 3, 1, 1.0, 1.0, GridBagConstraints.NORTH,
                 GridBagConstraints.BOTH, insets, 0, 0));
 
@@ -166,7 +165,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         JPanel panel2 = new JPanel();
         infoLabel = new JLabel("What is the name of this movie?");
         panel2.setOpaque(false);
-        infoLabel.setFont(titlefont);
+        infoLabel.setFont(titleFont);
         infoLabel.setForeground(new Color(145, 93, 240));
         panel2.add(infoLabel);
         panel2.setPreferredSize(new Dimension(50, 5));
@@ -186,7 +185,7 @@ public class PictureFrame extends JFrame implements Runnable, ActionListener, Mo
         // Overview Design
         description = new JLabel("<html><body><p style=\"color:white; font-size: 27px;\">" + title + "<br><br><p style=\"color:#eebbef;\">" + overview + "</p></body></html>");
         description.setPreferredSize(new Dimension(300, 500)); // Enough space for text
-        description.setFont(titlefont);
+        description.setFont(titleFont);
         description.setForeground(new Color(238, 187, 239, 255));
         description.setVisible(false);
         gbc.gridx = 2;
